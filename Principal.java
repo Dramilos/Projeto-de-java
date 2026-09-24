@@ -2,9 +2,6 @@ import java.util.Scanner;
 
 public class Principal
 {
-    static int quantNotas;
-    static String nomeClasse;
-    static Diario turma;
     static Scanner teclado = new Scanner(System.in);
 
     public static void fflush()
@@ -13,78 +10,6 @@ public class Principal
         {
             System.out.println();
         }
-    }
-    
-    public static void criarDiario()
-    {
-        fflush();
-
-        System.out.println("\nQual o nome da turma? ");
-        nomeClasse = teclado.nextLine();
-
-        System.out.println("\nQuantas notas tem cada aluno? ");
-        quantNotas = teclado.nextInt();
-
-        // criar objeto diário de classe
-        turma = new Diario(nomeClasse, quantNotas);
-    }
-
-    public static void adicionarAlunos()
-    {
-        fflush();
-
-        int quantAlunos;
-
-        System.out.println("\nQuantos alunos deseja adicionar? ");
-        quantAlunos = teclado.nextInt();
-
-        for (int i = 0; i < quantAlunos; i++)
-        {
-            String nome;
-            int RA, nota;
-
-            teclado.nextLine();      // limpar o buffer
-
-            System.out.println("\n-=-=- ALUNO " + (i + 1) + " -=-=-=-");
-
-            System.out.println("\n -NOME: ");
-            nome = teclado.nextLine();
-
-            System.out.println("\n -RA: ");
-            RA = teclado.nextInt();
-
-            Aluno kid = new Aluno(nome, quantNotas, RA);
-
-            for (int j = 0; j < quantNotas ; j++)
-            {
-                System.out.println("\n -DIGITE A NOTA " + (j + 1));
-                do
-                {
-                    nota = teclado.nextInt();
-
-                    if(nota < 0 || nota > 100)
-                    {
-                        System.out.println("\n Valor inválido!");
-                    }
-
-                } while(nota < 0 || nota > 100);
-
-                kid.setNotas(j, nota);
-            }
-            turma.adicionaAluno(kid);
-        }
-
-    }
-
-    public static void relatorio()
-    {
-        fflush();
-
-        System.out.println("RELATÓRIO");
-        turma.medias();
-
-        System.out.println("Digite qualquer tecla para sair");
-        teclado.nextLine();
     }
 
     public static void main(String[] args)
@@ -103,13 +28,13 @@ public class Principal
             switch (option)
             {
                 case 1:
-                    criarDiario();
+                    Diario.criarDiario();
                     break;
                 case 2:
-                    adicionarAlunos();
+                    Diario.adicionarAlunos();
                     break;
                 case 3:
-                    relatorio();
+                    Diario.relatorio();
                     break;
                 case 4:
                     System.out.println(" -Saindo do sistema.");

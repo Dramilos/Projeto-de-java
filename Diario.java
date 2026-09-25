@@ -36,7 +36,7 @@ public class Diario
     }
 
     // método para adicionar alunos a lista
-    public static void adicionarAlunos()
+    public void adicionarAlunos()
     {
         Principal.fflush();
 
@@ -76,16 +76,24 @@ public class Diario
 
                 } while(nota < 0 || nota > 100);
 
-                kid.setNotas(j, nota);
+                kid.setNota(j, nota);
             }
             lista.add(kid);
         }
 
     }
 
+    // método para imprimir as notas individuais de um aluno
+    public void imprimirNotasIndividuais(int i)
+    {
+        for(int j = 0; j < turma.quantNotas; j++)
+            {
+                System.out.println("\t - nota " + (j + 1) + ": " + lista.get(i).getNota(j));
+            }
+    }
 
     // método que imprime um relatório
-    public static void relatorio()
+    public void relatorio()
     {
         Principal.fflush();
 
@@ -93,39 +101,67 @@ public class Diario
         
         for(int i = 0; i < lista.size(); i++)
         {
-            System.out.println("=========\nALUNO " + (i + 1));
+            System.out.println("==============\nALUNO " + (i + 1));
             System.out.println("\n -Nome: " + lista.get(i).getNome());
-            for(int j = 0; j < turma.quantNotas; j++)
-            {
-                System.out.println("\t - nota " + (j + 1) + ": " + lista.get(i).getNotas(j));
-            }
-            System.out.println("\n -Média: " + lista.get(i).getMedia());
+            System.out.println(" -RA: " + lista.get(i).getRA());
+            imprimirNotasIndividuais(i);
+            System.out.println(" -Média: " + lista.get(i).getMedia());
         }
 
         System.out.println("Digite qualquer tecla para sair");
         Principal.teclado.nextLine();
     }
 
-    // retorna as médias dos alunos
-    public void medias()
+    public static int checarRA(int RA)
     {
-        
+        for (int i = 0; i < lista.size(); i++)
+        {
+            if(RA == lista.get(i).getRA())
+            {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     // métodos para definir as notas de cada aluno
     public void definirNotas()
     {
-        
-    }
+        int RA, i, mod, newnota = 0;
 
-    // métodos para definir o nome da turma do diário
-    public void setNomeClasse(String nomeClasse)
-    {
-        this.nomeClasse = nomeClasse;
-    }
+        Principal.fflush();
 
-    public String getNomeClasse()
-    {
-        return nomeClasse;
+        do
+        {
+            System.out.println("Digite o RA do aluno para modificar a nota: ");
+            RA = Principal.teclado.nextInt();
+
+            i = checarRA(RA);
+
+            if(i == -1)
+            {
+                System.out.println("\nAluno não encontrado. Tente novamente");
+            }
+            else
+            {
+                System.out.println("\nAluno: " + lista.get(i).getNome());
+                imprimirNotasIndividuais(i);
+
+                System.out.println("\nQual das notas acima gostaria de modificar?");
+                mod = Principal.teclado.nextInt();
+
+                System.out.println("\n -Digite a nova nota do aluno:");
+                newnota = Principal.teclado.nextInt();
+
+                lista.get(i).setNota((mod - 1), newnota);
+
+                System.out.println("\nNotas atualizadas: ");
+                imprimirNotasIndividuais(i);
+
+                System.out.println("\nDigite 1 para trocar outra nota");
+                newnota = Principal.teclado.nextInt();
+            }
+        } while (i == -1 || newnota == 1);
     }
 }

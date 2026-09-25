@@ -14,12 +14,12 @@ public class Aluno
     }
 
     // métodos para as notas do aluno
-    public void setNotas(int i, int nota)
+    public void setNota(int i, int nota)
     {
         notas[i] = nota;
     }
 
-    public int getNotas(int i)
+    public int getNota(int i)
     {
         return notas[i];
     }

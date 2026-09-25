@@ -20,7 +20,7 @@ public class Principal
             fflush();
 
             System.out.println("==============\n\tSISTEMA DE NOTAS\n=============");
-            System.out.println(" 1 - Criar diário\n 2 - Adicionar alunos\n 3 - Relatório\n 4 - Sair");
+            System.out.println(" 1 - Criar diário\n 2 - Adicionar alunos\n 3 - Relatório\n 4 - Modificar uma nota\n 5 - Sair");
 
             option = teclado.nextInt();
             teclado.nextLine();         // limpar o buffer
@@ -31,18 +31,21 @@ public class Principal
                     Diario.criarDiario();
                     break;
                 case 2:
-                    Diario.adicionarAlunos();
+                    Diario.turma.adicionarAlunos();
                     break;
                 case 3:
-                    Diario.relatorio();
+                    Diario.turma.relatorio();
                     break;
                 case 4:
+                    Diario.turma.definirNotas();
+                    break;
+                case 5:
                     System.out.println(" -Saindo do sistema.");
                     break;
                 default:
                     System.out.println(" -Opção inválida!\n");
             }
-        } while (option != 4);
+        } while (option != 5);
     }
 }
 

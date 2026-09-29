@@ -158,11 +158,47 @@ public class Diario
             System.out.println("\n -Nome: " + lista.get(i).getNome());
             System.out.println(" -RA: " + lista.get(i).getRA());
             imprimirNotasIndividuais(i);
+            histograma(i);
             System.out.println(" -Média: " + lista.get(i).getMedia());
         }
 
         System.out.println("Digite qualquer tecla para sair");
         Principal.teclado.nextLine();
+    }
+
+    public void histograma (int i)
+    {
+        int indice;
+        int[] vetor = new int[11];
+        
+        for(int j = 0; j < turma.quantNotas; j++)
+        {
+            indice = lista.get(i).getNota(j) / 10;
+            vetor[indice]++;
+        }
+
+        System.out.println(" -Histograma: ");
+        for(int j = 0; j < 11; j++)
+        {
+            if(j < 10)
+            {
+                System.out.printf("\t%d até %d: ", (j * 10), (j * 10 + 9));
+                for(int k = 0; k < vetor[j]; k++)
+                {
+                    System.out.printf("*");
+                }
+                System.out.println();
+            }
+            else
+            {
+                System.out.printf("\t100: ");
+                for(int k = 0; k < vetor[j]; k++)
+                {
+                    System.out.printf("*");
+                }
+                System.out.println();
+            }
+        }
     }
 
     public static int checarRA(int RA)
@@ -181,47 +217,106 @@ public class Diario
     // métodos para definir as notas de cada aluno
     public void definirNotas()
     {
-        int RA, i, mod, newnota = 0;
+        int RA = 0, i, mod = 0, newnota = 0, flag;
 
         Principal.fflush();
 
+        System.out.println("LISTA DE RAs: ");
+
+        for(int j = 0; j < lista.size(); j++)
+        {
+            System.out.println(" -RA: " + lista.get(j).getRA());
+        }
+
         do
         {
-            System.out.println("LISTA DE RAs: ");
-
-            for(int j = 0; j < lista.size(); j++)
+            do
             {
-                System.out.println(" -RA: " + lista.get(j).getRA());
-            }
+                flag = 0;
 
-            System.out.println("Digite o RA do aluno para modificar a nota: ");
-            RA = Integer.parseInt(Principal.teclado.nextLine().trim());
+                try
+                { 
+                    System.out.println("Digite o RA do aluno para modificar a nota: ");
+                    RA = Integer.parseInt(Principal.teclado.nextLine().trim());
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println(" - Erro! Espera-se valor numérico");
+                    flag = 1;
+                }
+            } while(flag == 1);       
 
             i = checarRA(RA);
 
-            if(i == -1)
+            try
             {
-                System.out.println("\nAluno não encontrado. Tente novamente");
+                if(i == -1)
+                {
+                    System.out.println("\nAluno não encontrado. Tente novamente");
+                }
+                else
+                {
+                    System.out.println("\nAluno: " + lista.get(i).getNome());
+                    imprimirNotasIndividuais(i);
+
+                    do
+                    {
+                        flag = 0;
+
+                        try
+                        {
+                            System.out.println("\nQual das notas acima gostaria de modificar?");
+                            mod = Integer.parseInt(Principal.teclado.nextLine().trim());
+
+                            if (mod > quantNotas || mod < 1)
+                            {
+                                System.out.println(" -Posição inválida!");
+                            }
+                        }
+                        catch (NumberFormatException f)
+                        {
+                            System.out.println(" - Erro! Espera-se valor numérico");
+                            flag = 1;
+                        }
+                    } while (mod > quantNotas || mod < 1 || flag == 1);
+
+                    do
+                    {
+                        flag = 0;
+
+                        try
+                        {   
+                            System.out.println("\n -Digite a nova nota do aluno:");
+                            newnota = Integer.parseInt(Principal.teclado.nextLine().trim());
+
+                            if(newnota < 0 || newnota > 100)
+                            {
+                                System.out.println("\n Valor inválido!");
+                            }
+                        }
+                        catch (NumberFormatException f)
+                        {
+                            System.out.println(" - Erro! Espera-se valor numérico");
+                            flag = 1;
+                        }
+
+                    } while(newnota < 0 || newnota > 100 || flag == 1);
+
+                    lista.get(i).setNota((mod - 1), newnota);
+
+                    System.out.println("\nNotas atualizadas: ");
+                    imprimirNotasIndividuais(i);
+
+                    System.out.println("\nDigite 1 para trocar outra nota");
+                    Integer.parseInt(Principal.teclado.nextLine().trim());
+                }
             }
-            else
+            catch (NumberFormatException e)
             {
-                System.out.println("\nAluno: " + lista.get(i).getNome());
-                imprimirNotasIndividuais(i);
-
-                System.out.println("\nQual das notas acima gostaria de modificar?");
-                mod = Integer.parseInt(Principal.teclado.nextLine().trim());
-
-                System.out.println("\n -Digite a nova nota do aluno:");
-                newnota = Integer.parseInt(Principal.teclado.nextLine().trim());
-
-                lista.get(i).setNota((mod - 1), newnota);
-
-                System.out.println("\nNotas atualizadas: ");
-                imprimirNotasIndividuais(i);
-
-                System.out.println("\nDigite 1 para trocar outra nota");
-                newnota = Principal.teclado.nextInt();
+                System.out.println(" - Erro! Espera-se valor numérico");
+                flag = 1;
             }
+            
         } while (i == -1 || newnota == 1);
     }
 }

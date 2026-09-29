@@ -36,25 +36,32 @@ public class Principal
                 }
             } while (flag == 1);
 
-            switch (option)
+            try
             {
-                case 1:
-                    Diario.criarDiario();
-                    break;
-                case 2:
-                    Diario.turma.adicionarAlunos();
-                    break;
-                case 3:
-                    Diario.turma.relatorio();
-                    break;
-                case 4:
-                    Diario.turma.definirNotas();
-                    break;
-                case 5:
-                    System.out.println(" -Saindo do sistema.");
-                    break;
-                default:
-                    System.out.println(" -Opção inválida!\n");
+                switch (option)
+                {
+                    case 1:
+                        Diario.criarDiario();
+                        break;
+                    case 2:
+                        Diario.turma.adicionarAlunos();
+                        break;
+                    case 3:
+                        Diario.turma.relatorio();
+                        break;
+                    case 4:
+                        Diario.turma.definirNotas();
+                        break;
+                    case 5:
+                        System.out.println(" -Saindo do sistema.");
+                        break;
+                    default:
+                        System.out.println(" -Opção inválida!\n");
+                }
+            }
+            catch (NullPointerException e)
+            {
+                System.out.println(" -O diário precisa ser criado antes de acessá-lo!");
             }
         } while (option != 5);
     }

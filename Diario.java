@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 public class Diario
 {
@@ -20,7 +21,7 @@ public class Diario
     // criador de diários
     public static void criarDiario()
     {
-        int quantNotas;
+        int quantNotas, flag;
         String nomeClasse;
 
         Principal.fflush();
@@ -28,59 +29,111 @@ public class Diario
         System.out.println("\nQual o nome da turma? ");
         nomeClasse = Principal.teclado.nextLine();
 
-        System.out.println("\nQuantas notas tem cada aluno? ");
-        quantNotas = Principal.teclado.nextInt();
+        do
+        {
+            flag = 0;
 
-        // criar objeto diário de classe
-        turma = new Diario(nomeClasse, quantNotas);
+            System.out.println("\nQuantas notas tem cada aluno? ");
+
+            try
+            {
+                quantNotas = Integer.parseInt(Principal.teclado.nextLine().trim());
+
+                // criar objeto diário de classe
+                turma = new Diario(nomeClasse, quantNotas);
+            }
+            catch (IllegalArgumentException e)
+            {
+                System.out.println(" -Erro. Tente novamente.");
+                flag = 1;
+            }
+            catch (InputMismatchException f)
+            {
+                System.out.println(" -Erro. Tente novamente.");
+                flag = 1;
+            }
+        } while (flag == 1);
     }
 
     // método para adicionar alunos a lista
     public void adicionarAlunos()
     {
+        int quantAlunos = 0, flag, sucesso = 0;
+
         Principal.fflush();
 
-        int quantAlunos;
-
-        System.out.println("\nQuantos alunos deseja adicionar? ");
-        quantAlunos = Principal.teclado.nextInt();
-
-        for (int i = 0; i < quantAlunos; i++)
+        do
         {
-            String nome;
-            int RA, nota;
+            flag = 0;
 
-            Principal.teclado.nextLine();      // limpar o buffer
-
-            System.out.println("\n-=-=- ALUNO " + (i + 1) + " -=-=-=-");
-
-            System.out.println("\n -NOME: ");
-            nome = Principal.teclado.nextLine();
-
-            System.out.println("\n -RA: ");
-            RA = Principal.teclado.nextInt();
-
-            Aluno kid = new Aluno(nome, turma.quantNotas, RA);
-
-            for (int j = 0; j < turma.quantNotas ; j++)
+            try
             {
-                System.out.println("\n -DIGITE A NOTA " + (j + 1));
-                do
-                {
-                    nota = Principal.teclado.nextInt();
-
-                    if(nota < 0 || nota > 100)
-                    {
-                        System.out.println("\n Valor inválido!");
-                    }
-
-                } while(nota < 0 || nota > 100);
-
-                kid.setNota(j, nota);
+                System.out.println("\nQuantos alunos deseja adicionar? ");
+                quantAlunos = Integer.parseInt(Principal.teclado.nextLine().trim());
             }
-            lista.add(kid);
-        }
+            catch (NumberFormatException e)
+            {
+                System.out.println(" - Erro! Espera-se valor numérico");
+                flag = 1;
+            }
+            catch (InputMismatchException f)
+            {
+                System.out.println(" - Erro! Espera-se valor numérico");
+                flag = 1;
+            }
+        } while(flag == 1);
 
+        do
+        {
+            flag = 0;
+
+            try
+            {
+                for (; sucesso < quantAlunos; sucesso++)
+                {
+                    String nome;
+                    int RA, nota;
+
+                    System.out.println("\n-=-=- ALUNO " + (sucesso + 1) + " -=-=-=-");
+
+                    System.out.println("\n -NOME: ");
+                    nome = Principal.teclado.nextLine();
+
+                    System.out.println("\n -RA: ");
+                    RA = Integer.parseInt(Principal.teclado.nextLine().trim());
+
+                    Aluno kid = new Aluno(nome, turma.quantNotas, RA);
+
+                    for (int j = 0; j < turma.quantNotas ; j++)
+                    {
+                        System.out.println("\n -DIGITE A NOTA " + (j + 1));
+                        do
+                        {
+                            nota = Integer.parseInt(Principal.teclado.nextLine().trim());
+
+                            if(nota < 0 || nota > 100)
+                            {
+                                System.out.println("\n Valor inválido!");
+                            }
+
+                        } while(nota < 0 || nota > 100);
+
+                        kid.setNota(j, nota);
+                    }
+                    lista.add(kid);
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                System.out.println(" - Erro! Espera-se valor numérico");
+                flag = 1;
+            }
+            catch (InputMismatchException f)
+            {
+                System.out.println(" - Erro! Espera-se valor numérico");
+                flag = 1;
+            }
+        } while (flag == 1);
     }
 
     // método para imprimir as notas individuais de um aluno
@@ -134,8 +187,15 @@ public class Diario
 
         do
         {
+            System.out.println("LISTA DE RAs: ");
+
+            for(int j = 0; j < lista.size(); j++)
+            {
+                System.out.println(" -RA: " + lista.get(j).getRA());
+            }
+
             System.out.println("Digite o RA do aluno para modificar a nota: ");
-            RA = Principal.teclado.nextInt();
+            RA = Integer.parseInt(Principal.teclado.nextLine().trim());
 
             i = checarRA(RA);
 
@@ -149,10 +209,10 @@ public class Diario
                 imprimirNotasIndividuais(i);
 
                 System.out.println("\nQual das notas acima gostaria de modificar?");
-                mod = Principal.teclado.nextInt();
+                mod = Integer.parseInt(Principal.teclado.nextLine().trim());
 
                 System.out.println("\n -Digite a nova nota do aluno:");
-                newnota = Principal.teclado.nextInt();
+                newnota = Integer.parseInt(Principal.teclado.nextLine().trim());
 
                 lista.get(i).setNota((mod - 1), newnota);
 

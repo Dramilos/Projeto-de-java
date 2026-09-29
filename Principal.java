@@ -14,7 +14,7 @@ public class Principal
 
     public static void main(String[] args)
     {
-        int option;
+        int option = 0, flag;
         do
         {
             fflush();
@@ -22,41 +22,47 @@ public class Principal
             System.out.println("==============\n\tSISTEMA DE NOTAS\n=============");
             System.out.println(" 1 - Criar diário\n 2 - Adicionar alunos\n 3 - Relatório\n 4 - Modificar uma nota\n 5 - Sair");
 
-            option = teclado.nextInt();
-            teclado.nextLine();         // limpar o buffer
-
-            switch (option)
+            do
             {
-                case 1:
-                    Diario.criarDiario();
-                    break;
-                case 2:
-                    Diario.turma.adicionarAlunos();
-                    break;
-                case 3:
-                    Diario.turma.relatorio();
-                    break;
-                case 4:
-                    Diario.turma.definirNotas();
-                    break;
-                case 5:
-                    System.out.println(" -Saindo do sistema.");
-                    break;
-                default:
-                    System.out.println(" -Opção inválida!\n");
+                flag = 0;
+                try
+                {
+                    option = Integer.parseInt(teclado.nextLine().trim());
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println(" - Erro! Espera-se valor numérico");
+                    flag = 1;
+                }
+            } while (flag == 1);
+
+            try
+            {
+                switch (option)
+                {
+                    case 1:
+                        Diario.criarDiario();
+                        break;
+                    case 2:
+                        Diario.turma.adicionarAlunos();
+                        break;
+                    case 3:
+                        Diario.turma.relatorio();
+                        break;
+                    case 4:
+                        Diario.turma.definirNotas();
+                        break;
+                    case 5:
+                        System.out.println(" -Saindo do sistema.");
+                        break;
+                    default:
+                        System.out.println(" -Opção inválida!\n");
+                }
+            }
+            catch (NullPointerException e)
+            {
+                System.out.println(" -O diário precisa ser criado antes de acessá-lo!");
             }
         } while (option != 5);
     }
 }
-
-/*
-do
-            {
-                RA = teclado.nextInt();
-
-                if(RA > 99999999 || RA < 10000000)
-                {
-                    System.out.println("\n -valor inválido, tente novamente");
-                }
-            } while (RA > 99999999 || RA < 10000000);
- */
